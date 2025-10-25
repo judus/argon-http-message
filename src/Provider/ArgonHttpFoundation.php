@@ -9,14 +9,8 @@ use Maduser\Argon\Container\ArgonContainer;
 use Maduser\Argon\Container\Contracts\ParameterStoreInterface;
 use Maduser\Argon\Container\Exceptions\ContainerException;
 use Maduser\Argon\Container\Exceptions\NotFoundException;
-use Maduser\Argon\Contracts\ErrorHandling\Http\ErrorHandlerInterface;
-use Maduser\Argon\Contracts\Handler\AppHandlerInterface;
-use Maduser\Argon\Contracts\Handler\HttpKernelInterface;
-use Maduser\Argon\Contracts\Http\ResponseEmitterInterface;
-use Maduser\Argon\Contracts\KernelInterface;
 use Maduser\Argon\Http\Kernel;
 use Maduser\Argon\Http\ResponseEmitter;
-use Maduser\Argon\Error\Provider\ArgonErrorHandlerServiceProvider;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -51,7 +45,6 @@ final class ArgonHttpFoundation extends AbstractServiceProvider
     {
         $parameters = $this->configureParameters($container);
 
-
         /** Logging */
         if (!$container->has(LoggerInterface::class)) {
             $container->set(LoggerInterface::class, NullLogger::class);
@@ -75,13 +68,7 @@ final class ArgonHttpFoundation extends AbstractServiceProvider
         $container->set(AppHandlerInterface::class, static function () use ($container) {
             return $container->get(HttpKernelInterface::class);
         })->skipCompilation();
-
-
-        /** Exception Handler */
-        //$container->register(ArgonErrorHandlerServiceProvider::class);
-
     }
-
 
     /**
      * @throws ContainerException
