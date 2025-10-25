@@ -13,7 +13,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Maduser\\Argon\\Http\\": "src/"
+      "Maduser\\Argon\\": "src/"
     }
   },
   "autoload-dev": {
@@ -22,15 +22,56 @@
     }
   },
   "require": {
-    "php": "^8.2"
+    "maduser/argon": "dev-master",
+    "maduser/argon-error": "dev-master",
+    "maduser/argon-middleware": "dev-master",
+    "psr/http-factory": "^1.1",
+    "psr/http-message": "^2.0",
+    "psr/http-server-handler": "^1.0",
+    "psr/http-server-middleware": "^1.0",
+    "psr/log": "^3.0"
   },
   "require-dev": {
-    "vimeo/psalm": "^6.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
     "phpunit/phpunit": "^11.5",
-    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-    "slevomat/coding-standard": "^8.16",
-    "squizlabs/php_codesniffer": "^3.8"
+    "slevomat/coding-standard": "^8.24",
+    "squizlabs/php_codesniffer": "^4.0",
+    "vimeo/psalm": "^6.13"
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-prophecy"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-console"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-middleware"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-routing"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-view"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-http"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-error"
+    }
+  ],
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
