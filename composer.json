@@ -13,7 +13,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Maduser\\Argon\\": "src/"
+      "Maduser\\Argon\\Http\\": "src/"
     }
   },
   "autoload-dev": {
@@ -77,9 +77,6 @@
     "sort-packages": true,
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
-    },
-    "platform": {
-      "php": "8.2"
     }
   },
   "scripts": {

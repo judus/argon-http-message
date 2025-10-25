@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Maduser\Argon\Contracts\Http\Server\Factory;
+namespace Maduser\Argon\Http\Contracts\Server\Factory;
 
 use Maduser\Argon\Middleware\Contracts\RequestHandlerFactoryInterface as MiddlewareRequestHandlerFactoryInterface;
 use Maduser\Argon\Container\Exceptions\ContainerException;
