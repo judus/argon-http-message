@@ -22,9 +22,7 @@
     }
   },
   "require": {
-    "maduser/argon": "dev-master",
-    "maduser/argon-error": "dev-master",
-    "maduser/argon-middleware": "dev-master",
+    "maduser/argon-prophecy": "dev-dev",
     "psr/http-factory": "^1.1",
     "psr/http-message": "^2.0",
     "psr/http-server-handler": "^1.0",
@@ -41,35 +39,7 @@
   "repositories": [
     {
       "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon"
-    },
-    {
-      "type": "path",
       "url": "~/workspace/argon/packages/maduser-argon-prophecy"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-console"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-middleware"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-routing"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-view"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-http"
-    },
-    {
-      "type": "path",
-      "url": "~/workspace/argon/packages/maduser-argon-error"
     }
   ],
   "config": {

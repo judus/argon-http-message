@@ -11,6 +11,7 @@ use Maduser\Argon\Container\Exceptions\ContainerException;
 use Maduser\Argon\Container\Exceptions\NotFoundException;
 use Maduser\Argon\Http\Kernel;
 use Maduser\Argon\Http\ResponseEmitter;
+use Override;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -41,6 +42,7 @@ final class ArgonHttpFoundation extends AbstractServiceProvider
      * @throws ContainerException
      * @throws NotFoundException
      */
+    #[Override]
     public function register(ArgonContainer $container): void
     {
         $parameters = $this->configureParameters($container);
@@ -74,6 +76,7 @@ final class ArgonHttpFoundation extends AbstractServiceProvider
      * @throws ContainerException
      * @throws NotFoundException
      */
+    #[Override]
     public function boot(ArgonContainer $container): void
     {
         //$container->get(ErrorHandlerInterface::class)->register();
