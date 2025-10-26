@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Maduser\Argon\Http;
 
-use Maduser\Argon\Contracts\KernelInterface;
-use Maduser\Argon\Contracts\ErrorHandling\Http\ErrorHandlerInterface;
-use Maduser\Argon\Contracts\Http\ResponseEmitterInterface;
+use Maduser\Argon\Contracts\Handler\HttpKernelInterface;
+use Maduser\Argon\Error\Contracts\ErrorHandlerInterface;
+use Maduser\Argon\Error\Contracts\ResponseEmitterInterface;
 use Maduser\Argon\Http\Message\Response;
 use Maduser\Argon\Http\Message\Stream;
 use Psr\Http\Message\ResponseInterface;
@@ -22,7 +22,7 @@ use Throwable;
  * implementations. If these services are misconfigured, unavailable, or fail internally,
  * Kernel falls back to internal hardcoded mechanisms to guarantee a basic 500 Internal Server Error.
  */
-final readonly class Kernel implements KernelInterface
+final readonly class Kernel implements HttpKernelInterface
 {
     public function __construct(
         private ErrorHandlerInterface $exceptionHandler,

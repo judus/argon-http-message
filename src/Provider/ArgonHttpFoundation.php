@@ -9,6 +9,8 @@ use Maduser\Argon\Container\ArgonContainer;
 use Maduser\Argon\Container\Contracts\ParameterStoreInterface;
 use Maduser\Argon\Container\Exceptions\ContainerException;
 use Maduser\Argon\Container\Exceptions\NotFoundException;
+use Maduser\Argon\Contracts\Handler\AppHandlerInterface;
+use Maduser\Argon\Error\Contracts\ResponseEmitterInterface;
 use Maduser\Argon\Http\Kernel;
 use Maduser\Argon\Http\ResponseEmitter;
 use Override;
@@ -57,24 +59,14 @@ final class ArgonHttpFoundation extends AbstractServiceProvider
         /** Kernel */
         $container->set(ResponseEmitterInterface::class, ResponseEmitter::class);
 
-        $container->set(HttpKernelInterface::class, Kernel::class, [
+        $container->set(AppHandlerInterface::class, Kernel::class, [
             'logger' => LoggerInterface::class,
             'debug' => $parameters->get('debug', false),
             'shouldExit' => $parameters->get('kernel.shouldExit', true),
-        ])->tag(['kernel.http']);
-
-        $container->set(KernelInterface::class, static function () use ($container) {
-            return $container->get(HttpKernelInterface::class);
-        })->skipCompilation();
-
-        $container->set(AppHandlerInterface::class, static function () use ($container) {
-            return $container->get(HttpKernelInterface::class);
-        })->skipCompilation();
+        ]);
     }
 
     /**
-     * @throws ContainerException
-     * @throws NotFoundException
      */
     #[Override]
     public function boot(ArgonContainer $container): void

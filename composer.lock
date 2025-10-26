@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7514d6e8373dde57ebf41808bb74c00d",
+    "content-hash": "2a29704312ebf3178133c76a50555035",
     "packages": [
         {
             "name": "maduser/argon",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "/home/maduser/workspace/argon/packages/maduser-argon",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/judus/argon.git",
                 "reference": "3bb606f52e5fc950688b93fc4903a1291313cd2d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/judus/argon/zipball/3bb606f52e5fc950688b93fc4903a1291313cd2d",
+                "reference": "3bb606f52e5fc950688b93fc4903a1291313cd2d",
+                "shasum": ""
             },
             "require": {
                 "nette/php-generator": "^4.2",
@@ -26,47 +32,107 @@
                 "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload/override-attribute.php"
+                ],
+                "psr-4": {
+                    "Maduser\\Argon\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Duseyau",
+                    "email": "julien.duseyau@gmail.com"
+                }
+            ],
+            "description": "A high-performance, modular, PSR-11 compliant dependency injection container for PHP.",
+            "support": {
+                "issues": "https://github.com/judus/argon/issues",
+                "source": "https://github.com/judus/argon/tree/master"
+            },
+            "time": "2025-10-25T09:49:43+00:00"
+        },
+        {
+            "name": "maduser/argon-error",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "/home/maduser/workspace/argon/packages/maduser-argon-error",
+                "reference": "2ebb9451169d2dc1cf2a083603b56a909bbf3cf7"
+            },
+            "require": {
+                "maduser/argon": "dev-master",
+                "psr/http-factory": "^1.1",
+                "psr/http-message": "^2.0",
+                "psr/log": "^3.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+                "phpunit/phpunit": "^11.5",
+                "slevomat/coding-standard": "^8.24",
+                "squizlabs/php_codesniffer": "^4.0",
+                "vimeo/psalm": "^6.13"
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Maduser\\Argon\\Container\\": "src/"
-                },
-                "files": [
-                    "autoload/override-attribute.php"
-                ]
+                    "Maduser\\Argon\\Error\\": "src/"
+                }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Tests\\Mocks\\": "tests/resources/mocks/",
-                    "Tests\\Unit\\": "tests/unit/",
-                    "Tests\\Integration\\": "tests/integration/"
+                    "Tests\\": "tests/"
                 }
             },
             "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ],
-                "test:coverage": [
-                    "vendor/bin/phpunit  --coverage-clover=coverage.xml --coverage-html coverage-report && open coverage-report/index.html"
-                ],
                 "phpcs": [
                     "vendor/bin/phpcs --standard=phpcs.xml"
-                ],
-                "psalm": [
-                    "vendor/bin/psalm --output-format=github"
                 ],
                 "phpcs:fix": [
                     "vendor/bin/phpcbf --standard=phpcs.xml"
                 ],
+                "psalm": [
+                    "vendor/bin/psalm --output-format=github"
+                ],
+                "psalm:clear": [
+                    "vendor/bin/psalm --clear-cache"
+                ],
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "test:coverage": [
+                    "mkdir -p storage/phpunit/coverage/html && vendor/bin/phpunit --coverage-html storage/phpunit/coverage/html --coverage-clover storage/phpunit/coverage/clover.xml && open storage/phpunit/coverage/html/index.html"
+                ],
+                "ti": [
+                    "vendor/bin/phpunit --testsuite=integration"
+                ],
+                "tu": [
+                    "vendor/bin/phpunit --testsuite=unit"
+                ],
+                "watch": [
+                    "find src/ | entr -r composer check"
+                ],
+                "watch:test": [
+                    "find src/ | entr -r composer test"
+                ],
+                "watch:fix": [
+                    "find src/ | entr -r composer phpcs:fix"
+                ],
                 "check": [
-                    "@test",
+                    "@test:coverage",
                     "@psalm",
                     "@phpcs:fix",
                     "@phpcs"
                 ],
                 "ci": [
                     "@test",
-                    "@test:coverage",
                     "@psalm",
                     "@phpcs"
                 ]
@@ -80,7 +146,108 @@
                     "email": "julien.duseyau@gmail.com"
                 }
             ],
-            "description": "A high-performance, modular, PSR-11 compliant dependency injection container for PHP.",
+            "transport-options": {
+                "relative": false
+            }
+        },
+        {
+            "name": "maduser/argon-prophecy",
+            "version": "dev-dev",
+            "dist": {
+                "type": "path",
+                "url": "/home/maduser/workspace/argon/packages/maduser-argon-prophecy",
+                "reference": "d03379080c41f47608a2c774dc37d4aa68f43cc7"
+            },
+            "require": {
+                "maduser/argon": "dev-master",
+                "maduser/argon-error": "dev-master",
+                "maduser/argon-http": "dev-master",
+                "psr/http-message": "^2.0",
+                "psr/log": "^3.0"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
+                "ext-pcntl": "*",
+                "ext-posix": "*",
+                "filp/whoops": "^2.18",
+                "guzzlehttp/guzzle": "^7.9",
+                "illuminate/database": "12.6.*",
+                "monolog/monolog": "^3.9",
+                "phpunit/phpunit": "^11.5",
+                "slevomat/coding-standard": "^8.24",
+                "squizlabs/php_codesniffer": "^4.0",
+                "symfony/var-dumper": "^7.2",
+                "twig/twig": "^3.20",
+                "vimeo/psalm": "^6.13",
+                "vlucas/phpdotenv": "^5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Maduser\\Argon\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\Unit\\": "tests/unit/"
+                }
+            },
+            "scripts": {
+                "phpcs": [
+                    "vendor/bin/phpcs --standard=phpcs.xml"
+                ],
+                "phpcs:fix": [
+                    "vendor/bin/phpcbf --standard=phpcs.xml"
+                ],
+                "psalm": [
+                    "vendor/bin/psalm --output-format=github"
+                ],
+                "psalm:clear": [
+                    "vendor/bin/psalm --clear-cache"
+                ],
+                "test": [
+                    "vendor/bin/phpunit"
+                ],
+                "test:coverage": [
+                    "mkdir -p storage/phpunit/coverage/html && vendor/bin/phpunit --coverage-html storage/phpunit/coverage/html --coverage-clover storage/phpunit/coverage/clover.xml && open storage/phpunit/coverage/html/index.html"
+                ],
+                "ti": [
+                    "vendor/bin/phpunit --testsuite=unit"
+                ],
+                "tu": [
+                    "vendor/bin/phpunit --testsuite=unit"
+                ],
+                "watch": [
+                    "find src/ | entr -r composer check"
+                ],
+                "watch:test": [
+                    "find src/ | entr -r composer test"
+                ],
+                "watch:fix": [
+                    "find src/ | entr -r composer phpcs:fix"
+                ],
+                "check": [
+                    "@test:coverage",
+                    "@psalm",
+                    "@phpcs:fix",
+                    "@phpcs"
+                ],
+                "ci": [
+                    "@test",
+                    "@psalm",
+                    "@phpcs"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Duseyau",
+                    "email": "julien.duseyau@gmail.com"
+                }
+            ],
+            "description": "A strict, DI-first and PSR-compliant PHP runtime, for the law-abiding Prophets.",
             "transport-options": {
                 "relative": false
             }
@@ -5556,7 +5723,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "maduser/argon": 20
+        "maduser/argon-error": 20,
+        "maduser/argon-prophecy": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

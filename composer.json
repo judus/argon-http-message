@@ -23,6 +23,7 @@
   },
   "require": {
     "maduser/argon-prophecy": "dev-dev",
+    "maduser/argon-error": "dev-master",
     "psr/http-factory": "^1.1",
     "psr/http-message": "^2.0",
     "psr/http-server-handler": "^1.0",
@@ -40,6 +41,10 @@
     {
       "type": "path",
       "url": "~/workspace/argon/packages/maduser-argon-prophecy"
+    },
+    {
+      "type": "path",
+      "url": "~/workspace/argon/packages/maduser-argon-error"
     }
   ],
   "config": {

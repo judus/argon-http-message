@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Maduser\Argon\Http;
 
-use Maduser\Argon\Contracts\Http\ResponseEmitterInterface;
+use Maduser\Argon\Error\Contracts\ResponseEmitterInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
