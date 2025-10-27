@@ -193,9 +193,26 @@ final class ServerRequest implements ServerRequestInterface
         $clone = clone $this;
         $clone->uri = $uri;
 
-        if (!$preserveHost && $uri->getHost() !== '') {
-            $clone->headers['host'] = [$uri->getHost()];
+        $host = $uri->getHost();
+        if ($host === '') {
+            return $clone;
         }
+
+        $headerValue = $host;
+        $port = $uri->getPort();
+        if ($port !== null) {
+            $headerValue .= ':' . $port;
+        }
+
+        if ($preserveHost) {
+            if (!isset($clone->headers['host']) || $clone->headers['host'] === []) {
+                $clone->headers['host'] = [$headerValue];
+            }
+
+            return $clone;
+        }
+
+        $clone->headers['host'] = [$headerValue];
 
         return $clone;
     }

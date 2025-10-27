@@ -77,7 +77,7 @@ final class Response implements ResponseInterface
             $lower = strtolower($name);
             $normalized[$lower] = is_array($value)
                 ? array_values(array_map('strval', $value))
-                : [$value];
+                : [strval($value)];
         }
 
         return $normalized;
@@ -133,7 +133,7 @@ final class Response implements ResponseInterface
         $clone = clone $this;
         $clone->headers[strtolower($name)] = is_array($value)
             ? array_values(array_map('strval', $value))
-            : [$value];
+            : [strval($value)];
 
         return $clone;
     }
@@ -153,7 +153,7 @@ final class Response implements ResponseInterface
 
         $newValues = is_array($value)
             ? array_values(array_map('strval', $value))
-            : [$value];
+            : [strval($value)];
 
         $clone->headers[$lower] = [...$existing, ...$newValues];
 
@@ -176,13 +176,27 @@ final class Response implements ResponseInterface
     {
         $clone = clone $this;
         $clone->body = $body;
+
+        $size = $body->getSize();
+        if ($size !== null) {
+            $clone->headers['content-length'] = [(string) $size];
+        } else {
+            unset($clone->headers['content-length']);
+        }
         return $clone;
     }
 
     public function appendBody(string $chunk): Response
     {
         $clone = clone $this;
-        $clone->body->write($chunk);
+        $clone->body = new Stream((string) $clone->body . $chunk);
+
+        $size = $clone->body->getSize();
+        if ($size !== null) {
+            $clone->headers['content-length'] = [(string) $size];
+        } else {
+            unset($clone->headers['content-length']);
+        }
         return $clone;
     }
 
@@ -211,11 +225,14 @@ final class Response implements ResponseInterface
         return $this->reasonPhrase;
     }
 
+    /**
+     * @throws JsonException
+     */
     public function withJson(mixed $data, int $flags = JSON_THROW_ON_ERROR): Response
     {
         $clone = clone $this;
 
-        $json = json_encode($data, $flags);
+        $json = json_encode($data, $flags | JSON_THROW_ON_ERROR);
 
         $stream = new Stream($json);
 
