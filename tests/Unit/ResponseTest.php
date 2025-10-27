@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message;
+namespace Tests\Unit;
 
+use JsonException;
 use Maduser\Argon\Http\Message\Response;
 use Maduser\Argon\Http\Message\Stream;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
-/**
- * @covers \Maduser\Argon\Http\Message\Response
- */
+#[CoversClass(Response::class)]
 final class ResponseTest extends TestCase
 {
     public function testDefaultConstructorValues(): void
@@ -41,6 +40,20 @@ final class ResponseTest extends TestCase
         $this->assertFalse($response->hasHeader('content-length'));
     }
 
+    public function testWithHeaderCastsScalarValuesToStrings(): void
+    {
+        $response = (new Response())->withHeader('X-Test', 123);
+
+        $this->assertSame(['123'], $response->getHeader('X-Test'));
+    }
+
+    public function testWithHeaderAcceptsArrayValues(): void
+    {
+        $response = (new Response())->withHeader('X-Test', ['one', 2]);
+
+        $this->assertSame(['one', '2'], $response->getHeader('X-Test'));
+    }
+
     public function testGetHeadersReturnsExpectedArray(): void
     {
         $response = new Response();
@@ -52,15 +65,62 @@ final class ResponseTest extends TestCase
         $this->assertEquals(['value'], $headers['x-test']);
     }
 
+    public function testConstructorNormalizesHeaders(): void
+    {
+        $response = new Response(body: new Stream(''), headers: [
+            'X-Scalar' => 42,
+            'X-List' => ['foo', 123],
+        ]);
+
+        $headers = $response->getHeaders();
+
+        $this->assertSame(['42'], $headers['x-scalar']);
+        $this->assertSame(['foo', '123'], $headers['x-list']);
+    }
+
     public function testBodyManipulation(): void
     {
         $stream = Stream::fromString('foobar');
         $response = (new Response())->withBody($stream);
 
         $this->assertSame('foobar', (string) $response->getBody());
+        $this->assertSame(['6'], $response->getHeader('content-length'));
 
         $appended = $response->appendBody('baz');
         $this->assertStringContainsString('baz', (string) $appended->getBody());
+        $this->assertSame(['9'], $appended->getHeader('content-length'));
+    }
+
+    public function testAppendBodyDoesNotMutateOriginalStream(): void
+    {
+        $response = new Response(new Stream('hello'));
+        $appended = $response->appendBody(' world');
+
+        $this->assertSame('hello', (string) $response->getBody());
+        $this->assertSame('hello world', (string) $appended->getBody());
+        $this->assertSame(['11'], $appended->getHeader('Content-Length'));
+    }
+
+    public function testWithAddedHeaderAcceptsArrayValues(): void
+    {
+        $response = new Response();
+        $updated = $response->withAddedHeader('X-Test', ['one', 2]);
+
+        $this->assertSame(['one', '2'], $updated->getHeader('X-Test'));
+    }
+
+    public function testWithBodyRemovesContentLengthWhenSizeUnknown(): void
+    {
+        $resource = fopen('php://output', 'w');
+        $this->assertNotFalse($resource);
+
+        $response = new Response(new Stream('123456'));
+        $nullSizeStream = Stream::fromResource($resource);
+
+        $updated = $response->withBody($nullSizeStream);
+
+        $this->assertFalse($updated->hasHeader('Content-Length'));
+        $nullSizeStream->detach();
     }
 
     public function testWithStatusAndReason(): void
@@ -115,5 +175,14 @@ final class ResponseTest extends TestCase
 
         $json = Response::json(['foo' => 'bar']);
         $this->assertStringContainsString('application/json', $json->getHeaderLine('content-type'));
+    }
+
+    public function testWithJsonThrowsOnEncodingErrors(): void
+    {
+        $response = new Response();
+
+        $this->expectException(JsonException::class);
+
+        $response->withJson(['value' => NAN], JSON_PRETTY_PRINT);
     }
 }

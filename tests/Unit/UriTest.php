@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message;
+namespace Tests\Unit;
 
 use InvalidArgumentException;
 use Maduser\Argon\Http\Message\Uri;

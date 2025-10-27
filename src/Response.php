@@ -188,16 +188,7 @@ final class Response implements ResponseInterface
 
     public function appendBody(string $chunk): Response
     {
-        $clone = clone $this;
-        $clone->body = new Stream((string) $clone->body . $chunk);
-
-        $size = $clone->body->getSize();
-        if ($size !== null) {
-            $clone->headers['content-length'] = [(string) $size];
-        } else {
-            unset($clone->headers['content-length']);
-        }
-        return $clone;
+        return $this->withBody(new Stream((string) $this->body . $chunk));
     }
 
     public function withStatus($code, $reasonPhrase = ''): Response

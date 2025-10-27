@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message;
+namespace Tests\Unit;
 
 use Maduser\Argon\Http\Message\Stream;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +38,14 @@ final class StreamTest extends TestCase
         $stream = Stream::create('1234567890');
         $stream->seek(5);
         $this->assertSame(5, $stream->tell());
+    }
+
+    public function testFromFileThrowsWhenFileMissing(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to open file');
+
+        Stream::fromFile('/path/does/not/exist/' . uniqid('missing', true));
     }
 
     public function testIsSeekableReadableWritable(): void

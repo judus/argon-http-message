@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message\Factory;
+namespace Tests\Unit\Factory;
 
 use Maduser\Argon\Http\Message\Factory\StreamFactory;
 use Maduser\Argon\Http\Message\Stream;
@@ -61,22 +61,12 @@ final class StreamFactoryTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $this->factory->createStreamFromResource('not-a-resource');
     }
-    /**  @todo */
-//    public function testFromFileThrowsWhenFileDoesNotExist(): void
-//    {
-//        $this->expectException(RuntimeException::class);
-//        $this->expectExceptionMessage('Failed to open file: /path/to/nonexistent.file');
-//
-//        Stream::fromFile('/path/to/nonexistent.file', 'r');
-//    }
 
-    /** @todo test is wrong? since we finished error handler? */
-//    public function testCreateStreamFromFileThrowsExceptionOnInvalidFile(): void
-//    {
-//        $this->expectException(RuntimeException::class);
-//        $this->expectExceptionMessage('Failed to open file: /path/to/nonexistent/file.txt');
-//
-//        $factory = new StreamFactory();
-//        $factory->createStreamFromFile('/path/to/nonexistent/file.txt');
-//    }
+    public function testCreateStreamFromFileThrowsWhenFileMissing(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Failed to open file');
+
+        $this->factory->createStreamFromFile('/path/does/not/exist/' . uniqid('missing', true));
+    }
 }

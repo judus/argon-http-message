@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message;
+namespace Tests\Unit;
 
-use InvalidArgumentException;
 use Maduser\Argon\Http\Message\ServerRequest;
 use Maduser\Argon\Http\Message\Stream;
 use Maduser\Argon\Http\Message\Uri;
@@ -38,6 +37,29 @@ final class ServerRequestTest extends TestCase
         $this->assertFalse($new->hasHeader('X-Test'));
     }
 
+    public function testConstructorNormalizesScalarHeader(): void
+    {
+        $request = new ServerRequest(headers: ['X-Scalar' => 123]);
+
+        $this->assertSame(['123'], $request->getHeader('X-Scalar'));
+    }
+
+    public function testWithHeaderAcceptsArray(): void
+    {
+        $request = new ServerRequest();
+        $updated = $request->withHeader('X-Test', ['one', 2]);
+
+        $this->assertSame(['one', '2'], $updated->getHeader('X-Test'));
+    }
+
+    public function testWithAddedHeaderAcceptsArray(): void
+    {
+        $request = new ServerRequest();
+        $updated = $request->withAddedHeader('X-Test', ['one', 2]);
+
+        $this->assertSame(['one', '2'], $updated->getHeader('X-Test'));
+    }
+
     public function testBody(): void
     {
         $request = new ServerRequest();
@@ -64,18 +86,42 @@ final class ServerRequestTest extends TestCase
         $this->assertSame('PUT', $new->getMethod());
     }
 
-    public function testUri(): void
+    public function testWithUriOverridesHostHeaderWhenNotPreserving(): void
     {
-        $request = new ServerRequest();
-        $uri = new Uri('https://example.com');
+        $request = (new ServerRequest('GET', new Uri('https://example.com')))
+            ->withHeader('Host', 'example.com');
 
-        $new = $request->withUri($uri, preserveHost: false);
-        $this->assertSame($uri, $new->getUri());
-        $this->assertSame(['example.com'], $new->getHeader('host'));
+        $updated = $request->withUri(new Uri('https://example.org:8443/foo'), false);
 
-        $preserved = $request->withUri($uri, preserveHost: true);
-        $this->assertSame($uri, $preserved->getUri());
-        $this->assertFalse($preserved->hasHeader('host'));
+        $this->assertSame(['example.org:8443'], $updated->getHeader('Host'));
+    }
+
+    public function testWithUriKeepsExistingHostWhenPreserving(): void
+    {
+        $request = (new ServerRequest('GET', new Uri('https://example.com')))
+            ->withHeader('Host', 'example.com');
+
+        $updated = $request->withUri(new Uri('https://example.org'), true);
+
+        $this->assertSame(['example.com'], $updated->getHeader('Host'));
+    }
+
+    public function testWithUriAddsHostWhenMissingAndPreserving(): void
+    {
+        $request = new ServerRequest('GET', new Uri('https://example.com/path'));
+
+        $updated = $request->withUri(new Uri('https://example.org:9443'), true);
+
+        $this->assertSame(['example.org:9443'], $updated->getHeader('Host'));
+    }
+
+    public function testWithUriReturnsCloneWhenNoHost(): void
+    {
+        $request = new ServerRequest('GET', new Uri('https://example.com'));
+
+        $updated = $request->withUri(new Uri('/relative-path'));
+
+        $this->assertSame($request->getHeader('Host'), $updated->getHeader('Host'));
     }
 
     public function testServerParams(): void

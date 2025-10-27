@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message\Factory;
+namespace Tests\Unit\Factory;
 
 use Maduser\Argon\Http\Message\Factory\UriFactory;
 use PHPUnit\Framework\TestCase;

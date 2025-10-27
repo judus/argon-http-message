@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Http\Message\Factory;
+namespace Tests\Unit\Factory;
 
 use Maduser\Argon\Http\Message\Factory\ServerRequestFactory;
 use Maduser\Argon\Http\Message\ServerRequest;
@@ -25,6 +25,31 @@ final class ServerRequestFactoryTest extends TestCase
         $this->assertInstanceOf(ServerRequestInterface::class, $request);
         $this->assertSame('POST', $request->getMethod());
         $this->assertSame('https://example.com/foo', (string) $request->getUri());
+    }
+
+    public function testInvokeReturnsServerRequest(): void
+    {
+        $backupServer = $_SERVER ?? [];
+        $backupGet = $_GET ?? [];
+        $backupPost = $_POST ?? [];
+        $backupFiles = $_FILES ?? [];
+        $backupCookie = $_COOKIE ?? [];
+
+        $_SERVER = [];
+        $_GET = $_POST = $_COOKIE = $_FILES = [];
+
+        try {
+            $factory = new ServerRequestFactory();
+            $request = $factory();
+
+            $this->assertInstanceOf(ServerRequest::class, $request);
+        } finally {
+            $_SERVER = $backupServer;
+            $_GET = $backupGet;
+            $_POST = $backupPost;
+            $_FILES = $backupFiles;
+            $_COOKIE = $backupCookie;
+        }
     }
 
     public function testFromGlobalsDefaults(): void
@@ -102,6 +127,18 @@ final class ServerRequestFactoryTest extends TestCase
         ]);
 
         $this->assertInstanceOf(UploadedFileInterface::class, $normalized['file']);
+        if (is_string($mockUpload['tmp_name']) && file_exists($mockUpload['tmp_name'])) {
+            unlink($mockUpload['tmp_name']);
+        }
+    }
+
+    public function testNormalizeUploadedFilesSkipsInvalidEntries(): void
+    {
+        $normalized = $this->invokePrivateMethod(ServerRequestFactory::class, 'normalizeUploadedFiles', [[
+            'invalid' => ['name' => 'file.txt'],
+        ]]);
+
+        $this->assertArrayNotHasKey('invalid', $normalized);
     }
 
     /**
