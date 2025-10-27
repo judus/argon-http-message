@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Maduser\Argon\Http\Provider;
+namespace Maduser\Argon\Http\Message\Provider;
 
 use Maduser\Argon\Container\AbstractServiceProvider;
 use Maduser\Argon\Container\ArgonContainer;
@@ -28,7 +28,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
-class ArgonMessageServiceProvider extends AbstractServiceProvider
+class HttpMessageServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws ContainerException
