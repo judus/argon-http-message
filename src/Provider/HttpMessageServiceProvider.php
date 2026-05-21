@@ -17,6 +17,7 @@ use Maduser\Argon\Http\Message\ServerRequest;
 use Maduser\Argon\Http\Message\Stream;
 use Maduser\Argon\Http\Message\UploadedFile;
 use Maduser\Argon\Http\Message\Uri;
+use Override;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
@@ -28,11 +29,15 @@ use Psr\Http\Message\UploadedFileInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
-class HttpMessageServiceProvider extends AbstractServiceProvider
+/**
+ * @psalm-api
+ */
+final class HttpMessageServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws ContainerException
      */
+    #[Override]
     public function register(ArgonContainer $container): void
     {
         $container->set(ServerRequestFactoryInterface::class, ServerRequestFactory::class)

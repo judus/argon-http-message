@@ -18,7 +18,7 @@ final class Response implements ResponseInterface
     private StreamInterface $body;
 
     public function __construct(
-        StreamInterface $body = null,
+        ?StreamInterface $body = null,
         int $status = 200,
         array $headers = [],
         string $protocol = '1.1',
