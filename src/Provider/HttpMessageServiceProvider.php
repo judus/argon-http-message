@@ -40,11 +40,14 @@ final class HttpMessageServiceProvider extends AbstractServiceProvider
     #[Override]
     public function register(ArgonContainer $container): void
     {
+        $container->set(ServerRequestFactory::class)
+            ->tag(['http', 'psr-17']);
+
         $container->set(ServerRequestFactoryInterface::class, ServerRequestFactory::class)
             ->tag(['http', 'psr-17']);
 
         $container->set(ServerRequestInterface::class, ServerRequest::class)
-            ->factory(ServerRequestFactoryInterface::class)
+            ->factory(ServerRequestFactory::class)
             ->tag(['http', 'psr-7'])
             ->transient();
 
