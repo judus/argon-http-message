@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d2a884498fddb4035d306d77e30ecfd",
+    "content-hash": "ad29a7d000fce989211071e87c9b74a4",
     "packages": [
         {
             "name": "maduser/argon",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "/home/maduser/workspace/argon/packages/maduser-argon",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/judus/argon.git",
                 "reference": "76bf216bbd190e3eb0f6c30bb98b2bbc38191ac5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/judus/argon/zipball/76bf216bbd190e3eb0f6c30bb98b2bbc38191ac5",
+                "reference": "76bf216bbd190e3eb0f6c30bb98b2bbc38191ac5",
+                "shasum": ""
             },
             "require": {
                 "nette/php-generator": "^4.2",
@@ -26,6 +32,7 @@
                 "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -80,9 +87,7 @@
                 }
             ],
             "description": "A high-performance, modular, PSR-11 compliant dependency injection container for PHP.",
-            "transport-options": {
-                "relative": false
-            }
+            "time": "2026-05-21T07:47:46+00:00"
         },
         {
             "name": "nette/php-generator",
