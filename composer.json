@@ -33,13 +33,6 @@
     "squizlabs/php_codesniffer": "^4.0",
     "vimeo/psalm": "^6.13"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/judus/argon-container.git",
-      "no-api": true
-    }
-  ],
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
