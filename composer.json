@@ -3,7 +3,7 @@
   "description": "PSR-7 message objects and PSR-17 factories for the Argon runtime stack.",
   "type": "library",
   "license": "MIT",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "authors": [
     {
@@ -22,7 +22,7 @@
     }
   },
   "require": {
-    "maduser/argon-container": "dev-master",
+    "maduser/argon-container": "^1.3",
     "psr/http-factory": "^1.1",
     "psr/http-message": "^2.0"
   },
